@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:todo_project_demo/model/todo_model.dart';
 
@@ -27,11 +28,13 @@ class TodoController extends GetxController with StateMixin<List<TodoModel>> {
     update();
   }
 
-  Future editTodo(TodoModel todo) async {
+  Future editTodo(TodoModel todo, TodoModel newTodo) async {
+    todo.title = newTodo.title;
     update();
   }
 
   Future addTodo(TodoModel todo) async {
+    todoList.insert(0, todo..id = todoList.length + 1);
     update();
   }
 

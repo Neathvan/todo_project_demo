@@ -39,6 +39,7 @@ class HomeScreen extends GetView<TodoController> {
     return controller.obx(
       (state) => Expanded(
           child: ListView.builder(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               itemCount: controller.todoList.length,
               itemBuilder: (_, i) {
                 var task = controller.todoList[i];
@@ -58,7 +59,7 @@ class HomeScreen extends GetView<TodoController> {
           return AddTaskDialog(
             todoModel: task,
           );
-        });
+        }).then((value) => controller.editTodo(task, value));
   }
 
   _onMark(TodoModel task) {
@@ -73,8 +74,8 @@ class HomeScreen extends GetView<TodoController> {
     return showDialog(
         context: context,
         builder: (context) {
-          return AddTaskDialog();
-        });
+          return const AddTaskDialog();
+        }).then((value) => controller.addTodo(value));
   }
 
   _onSearch(k) {}
