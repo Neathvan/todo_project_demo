@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_project_demo/ui/component/home_screen.dart';
+import 'package:get/get.dart';
+import 'package:todo_project_demo/controller/todo_controller.dart';
+import 'package:todo_project_demo/ui/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,13 +12,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Todo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
         useMaterial3: true,
       ),
-      home: HomeScreen(),
+      initialBinding: MyAppBinding(),
+      home: const HomeScreen(),
     );
+  }
+}
+
+class MyAppBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<TodoController>(() => TodoController());
   }
 }
