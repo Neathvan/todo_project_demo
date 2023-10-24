@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       initialBinding: MyAppBinding(),
-      home: const HomeScreen(),
+      home: HomeScreen(),
     );
   }
 }

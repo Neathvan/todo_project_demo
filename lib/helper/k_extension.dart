@@ -28,7 +28,7 @@ extension NumberExtention on num {
 }
 
 class Measure {
-  static int paddingLevel1 = 16;
-  static var paddingLevel2 = 8;
+  static var paddingLevel1 = 16.0;
+  static var paddingLevel2 = 8.0;
   static var borderRaduisl1 = 5.0;
 }
