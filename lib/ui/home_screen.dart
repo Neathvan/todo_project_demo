@@ -6,6 +6,7 @@ import 'package:todo_project_demo/helper/config.dart';
 import 'package:todo_project_demo/helper/k_extension.dart';
 import 'package:todo_project_demo/model/todo_model.dart';
 import 'package:todo_project_demo/ui/component/add_task_dialog.dart';
+import 'package:todo_project_demo/ui/component/search_text_field_bar.dart';
 import 'package:todo_project_demo/ui/component/task_cell.dart';
 
 class HomeScreen extends GetView<TodoController> {
@@ -17,35 +18,45 @@ class HomeScreen extends GetView<TodoController> {
     return Scaffold(
       appBar: AppBar(title: Text(Config.appName)),
       body: _body(context).marginAll(Measure.paddingLevel1),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _onAdd(context),
-        backgroundColor: Colors.black,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Measure.borderRaduisl1)),
-        icon: Icon(Icons.add, color: KColors.white),
-        label: Text("Add", style: Get.textTheme.white13),
-      ),
+      floatingActionButton: _floatActionBtn(context),
+    );
+  }
+
+  FloatingActionButton _floatActionBtn(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: () => _onAdd(context),
+      backgroundColor: Colors.black,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Measure.borderRaduisl1)),
+      icon: Icon(Icons.add, color: KColors.white),
+      label: Text("Add", style: Get.textTheme.white13),
     );
   }
 
   Column _body(BuildContext context) {
     return Column(children: [
+      // search bar
       SearchTextFieldBar(onSearch: (v) => searchValue(v)),
       Measure.paddingLevel1.height,
-      Obx(() {
-        return _todoListLayout(context);
+      // taks layout
+      controller.obx((state) {
+        return Obx(() {
+          return _todoListLayout(context);
+        });
       })
     ]);
   }
 
   Widget _todoListLayout(BuildContext context) {
+    // filter list
     List list = controller.searchTodo(searchValue.value);
-    if (list.isEmpty) {
-      return Text(
-        "No result",
-        style: Get.textTheme.black15Bold,
-      );
-    }
+
+    // layout
+    if (list.isEmpty) return _emptyLayout();
+    return _tasksLayout(list, context);
+  }
+
+  Expanded _tasksLayout(List<dynamic> list, BuildContext context) {
     return Expanded(
         child: ListView.builder(
             padding: EdgeInsets.zero,
@@ -59,6 +70,10 @@ class HomeScreen extends GetView<TodoController> {
                   onRemove: () => _onRemove(task),
                   todoModel: task);
             }));
+  }
+
+  Text _emptyLayout() {
+    return Text("No result", style: Get.textTheme.black15Bold);
   }
 
   _onEdit(BuildContext context, TodoModel task) {
@@ -85,42 +100,5 @@ class HomeScreen extends GetView<TodoController> {
         builder: (context) {
           return const AddTaskDialog();
         }).then((value) => controller.addTodo(value));
-  }
-}
-
-class SearchTextFieldBar extends StatelessWidget {
-  final ValueChanged<String> onSearch;
-  SearchTextFieldBar({
-    required this.onSearch,
-    super.key,
-  });
-
-  final TextEditingController textEditingController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: textEditingController,
-      onChanged: (value) => onSearch(value),
-      decoration: InputDecoration(
-        hintText: 'Search...',
-        contentPadding: EdgeInsets.symmetric(
-            vertical: Measure.paddingLevel1, horizontal: Measure.paddingLevel1),
-        suffixIcon: IconButton(
-            icon: const Icon(Icons.clear),
-            onPressed: () {
-              textEditingController.clear();
-              onSearch('');
-            }),
-        prefixIcon: const Icon(Icons.search),
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: KColors.black),
-            borderRadius: BorderRadius.circular(Measure.borderRaduisl1)),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: KColors.black),
-          borderRadius: BorderRadius.circular(Measure.borderRaduisl1),
-        ),
-      ),
-    );
   }
 }

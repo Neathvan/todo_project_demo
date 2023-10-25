@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:todo_project_demo/helper/endpoint.dart';
 import 'package:todo_project_demo/model/todo_model.dart';
 
 class TodoController extends GetxController with StateMixin<List<TodoModel>> {
   RxList<TodoModel> todoList = <TodoModel>[].obs;
 
   final CollectionReference<Map<String, dynamic>> db =
-      FirebaseFirestore.instance.collection('todo');
+      FirebaseFirestore.instance.collection(Endpoint.todo);
 
   @override
   void onInit() {
@@ -16,9 +17,9 @@ class TodoController extends GetxController with StateMixin<List<TodoModel>> {
   }
 
   Future getTodoList() async {
-    var c = await db.get();
+    var res = await db.get();
 
-    todoList(c.docs.map((e) => TodoModel.fromJson(e.data())).toList());
+    todoList(res.docs.map((e) => TodoModel.fromJson(e.data())).toList());
     change(todoList, status: RxStatus.success());
     return;
   }
@@ -45,15 +46,6 @@ class TodoController extends GetxController with StateMixin<List<TodoModel>> {
     doc.set(todo.toJson()).then((value) => todoList.add(todo));
   }
 
-  List<TodoModel> searchTodo(String filter) {
-    if (filter.isNotEmpty) {
-      return todoList
-          .where((element) => element.title!.contains(filter.trim()))
-          .toList();
-    }
-    return todoList;
-  }
-
   Future markTodo(TodoModel todo) async {
     var param = {'is_mark': todo.todoIsMark ? 0 : 1};
 
@@ -62,5 +54,16 @@ class TodoController extends GetxController with StateMixin<List<TodoModel>> {
       todo.updateStatus();
       todoList.refresh();
     });
+  }
+
+  /// this func doesn't need request to firebase
+  /// firlter in local
+  List<TodoModel> searchTodo(String keyword) {
+    if (keyword.isNotEmpty) {
+      return todoList
+          .where((element) => element.title!.contains(keyword.trim()))
+          .toList();
+    }
+    return todoList;
   }
 }

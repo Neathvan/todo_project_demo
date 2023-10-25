@@ -26,46 +26,49 @@ class TaskCell extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Checkbox(
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  visualDensity: VisualDensity.compact,
-                  value: todoModel.todoIsMark,
-                  // splashRadius: 0,
-                  onChanged: (v) => onMark()),
-              Expanded(
-                child: Text(
-                  todoModel.title!,
-                  style: Get.textTheme.black15Bold.copyWith(
-                      decoration: todoModel.todoIsMark
-                          ? TextDecoration.lineThrough
-                          : null),
-                ),
-              )
-            ],
-          ),
-          Measure.paddingLevel2.height,
-          Row(
-            children: [
-              _buildBtn(KColors.green,
-                  icon: Icons.edit, name: 'Edit', callback: onEdit),
-              Measure.paddingLevel1.width,
-              _buildBtn(KColors.red,
-                  icon: Icons.edit, name: 'Remove', callback: onRemove),
-              const Spacer(),
-              Text(
-                todoModel.todoStatus.keyword.capitalizeFirst!,
-                style: Get.textTheme.black13Bold
-                    .copyWith(color: todoModel.todoStatus.statusColor),
-              )
-            ],
-          )
-        ],
+        children: [_content(), Measure.paddingLevel2.height, _action()],
       ),
+    );
+  }
+
+  Row _action() {
+    return Row(
+      children: [
+        _buildBtn(KColors.green,
+            icon: Icons.edit, name: 'Edit', callback: onEdit),
+        Measure.paddingLevel1.width,
+        _buildBtn(KColors.red,
+            icon: Icons.edit, name: 'Remove', callback: onRemove),
+        const Spacer(),
+        Text(
+          todoModel.todoStatus.keyword.capitalizeFirst!,
+          style: Get.textTheme.black13Bold
+              .copyWith(color: todoModel.todoStatus.statusColor),
+        )
+      ],
+    );
+  }
+
+  Row _content() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Checkbox(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            visualDensity: VisualDensity.compact,
+            value: todoModel.todoIsMark,
+            // splashRadius: 0,
+            onChanged: (v) => onMark()),
+        Expanded(
+          child: Text(
+            todoModel.title!,
+            style: Get.textTheme.black15Bold.copyWith(
+                decoration:
+                    todoModel.todoIsMark ? TextDecoration.lineThrough : null),
+          ),
+        )
+      ],
     );
   }
 

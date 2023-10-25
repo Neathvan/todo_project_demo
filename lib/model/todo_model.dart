@@ -43,18 +43,18 @@ class TodoModel {
 
   updateStatus() {
     if (todoStatus == TodoStatus.incomplete) {
-      isMark = 0;
+      isMark = 1;
       return status = TodoStatus.completed.keyword;
     }
-    isMark = 1;
+    isMark = 0;
     return status = TodoStatus.incomplete.keyword;
   }
 
   TodoStatus get todoStatus {
     if (todoIsMark) {
-      return TodoStatus.incomplete;
+      return TodoStatus.completed;
     }
-    return TodoStatus.completed;
+    return TodoStatus.incomplete;
   }
 }
 
