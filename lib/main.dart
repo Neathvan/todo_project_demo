@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:todo_project_demo/controller/todo_controller.dart';
 import 'package:todo_project_demo/ui/home_screen.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       ),
       initialBinding: MyAppBinding(),
       home: HomeScreen(),
+      builder: EasyLoading.init(),
     );
   }
 }

@@ -66,9 +66,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:403642611136:android:107088c1bd431933430425",
+        "mobilesdk_app_id": "1:403642611136:android:91e629b2a04d5cf9430425",
         "android_client_info": {
-          "package_name": "com.todo.demo_com"
+          "package_name": "com.example.todo_project_demo"
         }
       },
       "oauth_client": [

@@ -6,8 +6,9 @@ class TodoModel {
       {this.id = 0, this.isEdit = 0, this.isMark = 0, this.status, this.title});
 
   int? id;
+  String? uId;
   int? isEdit, isMark;
-  String? title, status;
+  String? title, status, detail;
 
   bool get todoIsEdit => isEdit!.isNegative;
   bool get todoIsMark => isMark!.isOdd;
@@ -15,20 +16,24 @@ class TodoModel {
   TodoModel clone() => TodoModel.fromJson(toJson());
 
   TodoModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id'] ?? 0;
+    uId = json['u_id'];
     isEdit = json['is_edit'];
     isMark = json['is_mark'];
     title = json['title'];
     status = json['status'];
+    detail = json['detail'];
   }
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['u_id'] = uId;
     data['is_edit'] = isEdit;
     data['is_mark'] = isMark;
     data['title'] = title;
     data['status'] = status;
+    data['detail'] = detail ?? '';
     return data;
   }
 
