@@ -33,7 +33,9 @@ class TaskCell extends StatelessWidget {
             children: [
               Checkbox(
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity.compact,
                   value: todoModel.todoIsMark,
+                  // splashRadius: 0,
                   onChanged: (v) => onMark()),
               Expanded(
                 child: Text(

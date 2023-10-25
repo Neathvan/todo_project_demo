@@ -30,30 +30,35 @@ class HomeScreen extends GetView<TodoController> {
 
   Column _body(BuildContext context) {
     return Column(children: [
-      SearchTextFieldBar(onSearch: (v) => controller.searchTodo(v)),
+      SearchTextFieldBar(onSearch: (v) => searchValue(v)),
       Measure.paddingLevel1.height,
-      _todoListLayout(context)
+      Obx(() {
+        return _todoListLayout(context);
+      })
     ]);
   }
 
   Widget _todoListLayout(BuildContext context) {
-    List list = controller.filterTodoList;
-
-    return controller.obx(
-      (state) => Expanded(
-          child: ListView.builder(
-              padding: EdgeInsets.zero,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              itemCount: list.length,
-              itemBuilder: (_, i) {
-                var task = list[i];
-                return TaskCell(
-                    onEdit: () => _onEdit(context, task),
-                    onMark: () => _onMark(task),
-                    onRemove: () => _onRemove(task),
-                    todoModel: task);
-              })),
-    );
+    List list = controller.searchTodo(searchValue.value);
+    if (list.isEmpty) {
+      return Text(
+        "No result",
+        style: Get.textTheme.black15Bold,
+      );
+    }
+    return Expanded(
+        child: ListView.builder(
+            padding: EdgeInsets.zero,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            itemCount: list.length,
+            itemBuilder: (_, i) {
+              var task = list[i];
+              return TaskCell(
+                  onEdit: () => _onEdit(context, task),
+                  onMark: () => _onMark(task),
+                  onRemove: () => _onRemove(task),
+                  todoModel: task);
+            }));
   }
 
   _onEdit(BuildContext context, TodoModel task) {
@@ -103,7 +108,10 @@ class SearchTextFieldBar extends StatelessWidget {
             vertical: Measure.paddingLevel1, horizontal: Measure.paddingLevel1),
         suffixIcon: IconButton(
             icon: const Icon(Icons.clear),
-            onPressed: () => textEditingController.clear()),
+            onPressed: () {
+              textEditingController.clear();
+              onSearch('');
+            }),
         prefixIcon: const Icon(Icons.search),
         enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: KColors.black),

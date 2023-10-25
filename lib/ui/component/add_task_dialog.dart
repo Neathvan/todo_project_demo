@@ -19,6 +19,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   final TodoController controller = Get.find<TodoController>();
   final FocusNode _focusNode = FocusNode();
   final _form = GlobalKey<FormState>();
+
   @override
   void initState() {
     todoModel = widget.todoModel ?? TodoModel();
@@ -39,7 +40,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   }
 
   String get submitTitle {
-    return 'Submit';
+    return widget.todoModel == null ? 'Add' : 'Update';
   }
 
   @override
@@ -61,11 +62,14 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   focusNode: _focusNode,
                   maxLines: null,
                   autofocus: true,
+                  textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(
                           vertical: Measure.paddingLevel1,
                           horizontal: Measure.paddingLevel1),
                       errorBorder: _outlineInputBorder(),
+                      border: _outlineInputBorder(),
+                      disabledBorder: _outlineInputBorder(),
                       enabledBorder: _outlineInputBorder(),
                       focusedBorder: _outlineInputBorder(),
                       focusedErrorBorder: _outlineInputBorder(true)),
@@ -82,6 +86,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                     }
                     return null;
                   },
+                  onFieldSubmitted: (value) => _onSubmit(),
                 )
               ],
             ),
@@ -90,14 +95,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       ),
       actions: [
         ElevatedButton(
-            onPressed: () {
-              final isValid = _form.currentState!.validate();
-
-              if (isValid) {
-                todoModel.title = addController.text.trim();
-                return Get.back(result: todoModel.clone());
-              }
-            },
+            onPressed: _onSubmit,
             style: ElevatedButton.styleFrom(
                 backgroundColor: KColors.green,
                 shape: RoundedRectangleBorder(
@@ -109,6 +107,17 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             ))
       ],
     );
+  }
+
+  void _onSubmit() {
+    final isValid = _form.currentState!.validate();
+
+    if (isValid) {
+      todoModel.title = addController.text.trim();
+      return Get.back(result: todoModel.clone());
+    } else {
+      FocusScope.of(context).requestFocus(_focusNode);
+    }
   }
 
   OutlineInputBorder _outlineInputBorder([bool error = false]) =>

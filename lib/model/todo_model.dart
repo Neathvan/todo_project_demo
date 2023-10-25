@@ -3,10 +3,14 @@ import 'package:todo_project_demo/helper/colors.dart';
 
 class TodoModel {
   TodoModel(
-      {this.id = 0, this.isEdit = 0, this.isMark = 0, this.status, this.title});
+      {this.id = 0,
+      this.isEdit = 0,
+      this.isMark = 0,
+      this.status = 'incomplete',
+      this.title});
 
   int? id;
-  String? uId;
+  String? uId = '';
   int? isEdit, isMark;
   String? title, status, detail;
 
@@ -39,16 +43,19 @@ class TodoModel {
 
   updateStatus() {
     if (todoStatus == TodoStatus.incomplete) {
-      isMark = 1;
+      isMark = 0;
       return status = TodoStatus.completed.keyword;
     }
-    isMark = 0;
+    isMark = 1;
     return status = TodoStatus.incomplete.keyword;
   }
 
-  TodoStatus get todoStatus =>
-      TodoStatus.values.firstWhere((element) => element.keyword == status,
-          orElse: () => TodoStatus.incomplete);
+  TodoStatus get todoStatus {
+    if (todoIsMark) {
+      return TodoStatus.incomplete;
+    }
+    return TodoStatus.completed;
+  }
 }
 
 enum TodoStatus {
