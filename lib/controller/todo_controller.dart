@@ -4,7 +4,7 @@ import 'package:todo_project_demo/model/todo_model.dart';
 
 class TodoController extends GetxController with StateMixin<List<TodoModel>> {
   List<TodoModel> todoList = [];
-
+  RxList<TodoModel> filterTodoList = <TodoModel>[].obs;
   @override
   void onInit() {
     getTodoList();
@@ -19,6 +19,7 @@ class TodoController extends GetxController with StateMixin<List<TodoModel>> {
               title: "title $index",
             ));
 
+    filterTodoList(todoList);
     change(todoList, status: RxStatus.success());
     return;
   }
@@ -38,7 +39,14 @@ class TodoController extends GetxController with StateMixin<List<TodoModel>> {
     update();
   }
 
-  Future searchTodo(TodoModel todo) async {
+  Future searchTodo(String filter) async {
+    if (filter.isNotEmpty) {
+      filterTodoList(todoList
+          .where((element) => element.title!.contains(filter.trim()))
+          .toList());
+    } else {
+      filterTodoList(todoList);
+    }
     update();
   }
 
