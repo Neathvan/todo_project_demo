@@ -76,7 +76,9 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [_textField(),],
+            children: [
+              _textField(),
+            ],
           ),
         ),
       ),

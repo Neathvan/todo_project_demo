@@ -1,3 +1,4 @@
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_project_demo/controller/todo_controller.dart';
@@ -41,7 +42,12 @@ class HomeScreen extends GetView<TodoController> {
       // taks layout
       controller.obx((state) {
         return Obx(() {
-          return _todoListLayout(context);
+          return Expanded(
+              child: EasyRefresh(
+                  onRefresh: () async {
+                    await controller.getTodoList();
+                  },
+                  child: _todoListLayout(context)));
         });
       })
     ]);
@@ -52,24 +58,26 @@ class HomeScreen extends GetView<TodoController> {
     List list = controller.searchTodo(searchValue.value);
 
     // layout
-    if (list.isEmpty) return _emptyLayout();
+    if (list.isEmpty)
+      return ListView(
+        children: [_emptyLayout()],
+      );
     return _tasksLayout(list, context);
   }
 
-  Expanded _tasksLayout(List<dynamic> list, BuildContext context) {
-    return Expanded(
-        child: ListView.builder(
-            padding: EdgeInsets.zero,
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            itemCount: list.length,
-            itemBuilder: (_, i) {
-              var task = list[i];
-              return TaskCell(
-                  onEdit: () => _onEdit(context, task),
-                  onMark: () => _onMark(task),
-                  onRemove: () => _onRemove(task),
-                  todoModel: task);
-            }));
+  Widget _tasksLayout(List<dynamic> list, BuildContext context) {
+    return ListView.builder(
+        padding: EdgeInsets.zero,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        itemCount: list.length,
+        itemBuilder: (_, i) {
+          var task = list[i];
+          return TaskCell(
+              onEdit: () => _onEdit(context, task),
+              onMark: () => _onMark(task),
+              onRemove: () => _onRemove(task),
+              todoModel: task);
+        });
   }
 
   Text _emptyLayout() {

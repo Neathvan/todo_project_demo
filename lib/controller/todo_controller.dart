@@ -61,7 +61,9 @@ class TodoController extends GetxController with StateMixin<List<TodoModel>> {
   List<TodoModel> searchTodo(String keyword) {
     if (keyword.isNotEmpty) {
       return todoList
-          .where((element) => element.title!.contains(keyword.trim()))
+          .where((element) => element.title!
+              .toLowerCase()
+              .contains(keyword.trim().toLowerCase()))
           .toList();
     }
     return todoList;
