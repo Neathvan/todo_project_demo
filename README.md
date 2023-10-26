@@ -19,9 +19,11 @@
 
 - Estimate the toal hours : 20 hours
 
-- ![#f03c15] FYI: 
-    -   Work only on andriod
-    -   Turn on wifi or internet  `#f03c15`
+```diff
+- FYI
+! Work only on andriod
+! Turn on wifi or internet  
+```
 
 
 
