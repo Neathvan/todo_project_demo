@@ -58,10 +58,8 @@ class HomeScreen extends GetView<TodoController> {
     List list = controller.searchTodo(searchValue.value);
 
     // layout
-    if (list.isEmpty)
-      return ListView(
-        children: [_emptyLayout()],
-      );
+    if (list.isEmpty) return ListView(children: [_emptyLayout()]);
+
     return _tasksLayout(list, context);
   }
 
